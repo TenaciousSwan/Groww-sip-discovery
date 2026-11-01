@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Groww SIP Discovery Engine — Churn Telemetry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand-group">
+        <img src="https://groww.in/groww-logo-270.png" alt="Groww Logo" class="brand-logo" onerror="this.style.display='none'">
+        <div class="brand-text">
+          <div class="badge-scope">GROWW MUTUAL FUNDS • RETENTION & PRODUCT GROWTH POD</div>
+          <h1 class="brand-title">🌱 Groww SIP Discovery Engine</h1>
+        </div>
+      </div>
+      <div class="header-badges">
+        <span class="badge badge-live">100% Authentic Data</span>
+        <span class="badge badge-compliance">SEBI Direct Broker Compliant</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+
+    <!-- Subtitle Description -->
+    <div class="header-caption">
+      <p>
+        Analyzing <strong>920+ genuine investor conversations</strong> across Google Play Store, Apple App Store, and TradingQ&A forums to uncover why first-time investors start, what triggers friction, and where product interventions can drive 12-month retention.
+      </p>
+    </div>
+
+    <!-- 4 Logical Tabs Navigation -->
+    <nav class="tabs-nav" role="tablist">
+      <button class="tab-btn active" data-tab="tab-overview">📊 Executive Overview</button>
+      <button class="tab-btn" data-tab="tab-behavior">🧭 Behavioral Journey Insights</button>
+      <button class="tab-btn" data-tab="tab-opportunities">🎯 Quantified Opportunity Areas</button>
+      <button class="tab-btn" data-tab="tab-benchmark">⚖️ AI Evidence Log & Benchmark</button>
+    </nav>
+
+    <!-- TAB 1: EXECUTIVE OVERVIEW -->
+    <section id="tab-overview" class="tab-content active">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Total Touchpoints</div>
+          <div class="kpi-value" id="kpi-total">921</div>
+          <div class="kpi-caption">100% Genuine Reviews</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Google Play Store</div>
+          <div class="kpi-value" id="kpi-play">549</div>
+          <div class="kpi-caption">Android Investors</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Apple App Store</div>
+          <div class="kpi-value" id="kpi-appstore">110</div>
+          <div class="kpi-caption">iOS Storefront</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">TradingQ&A Forums</div>
+          <div class="kpi-value" id="kpi-forums">262</div>
+          <div class="kpi-caption">In-Depth Discussions</div>
+        </div>
+      </div>
+
+      <div class="charts-row">
+        <div class="chart-card">
+          <h3>Touchpoints by Channel</h3>
+          <div class="chart-wrapper">
+            <canvas id="chart-channels"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Reported Investor Outcomes</h3>
+          <div class="chart-wrapper">
+            <canvas id="chart-outcomes"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout-box">
+        <strong>⚠️ Research Note on Public Review Sampling:</strong>
+        Public store reviews and community forums inherently over-represent negative friction (users rarely leave organic store reviews when an automated bank debit executes uneventfully). 
+        Private demographic attributes such as age, exact income, and personal money sources are rarely explicitly disclosed in public posts. 
+        Accordingly, this engine relies on stated behavioral evidence rather than imputed demographics.
+      </div>
+
+      <!-- Verbatim Touchpoint Explorer -->
+      <div class="card-section">
+        <div class="card-header-flex">
+          <div>
+            <h3>🔍 Verbatim Touchpoint Explorer</h3>
+            <p class="section-subtitle">Inspect authentic, PII-sanitized investor feedback with multi-attribute filtering.</p>
+          </div>
+          <div class="filter-controls">
+            <input type="text" id="verbatim-search" placeholder="Search keywords (e.g. autopay, penalty, loss)..." class="input-search">
+            <select id="filter-channel" class="select-filter">
+              <option value="All">All Channels</option>
+              <option value="Google Play Store">Google Play Store</option>
+              <option value="Apple App Store">Apple App Store</option>
+              <option value="TradingQ&A Forum">TradingQ&A Forum</option>
+            </select>
+            <select id="filter-stage" class="select-filter">
+              <option value="All">All Stages</option>
+              <option value="Month 1: Onboarding/Setup">Month 1: Onboarding/Setup</option>
+              <option value="Month 2-3: First Statements & Friction">Month 2-3: First Statements</option>
+              <option value="Month 4-6: Market Dip/Downturn">Month 4-6: Market Dip</option>
+              <option value="Month 7-12: Disengagement/Lapse">Month 7-12: Disengagement</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table" id="verbatim-table">
+            <thead>
+              <tr>
+                <th style="width: 100px;">ID</th>
+                <th style="width: 140px;">Channel</th>
+                <th style="width: 110px;">Date</th>
+                <th style="width: 180px;">Lifecycle Stage</th>
+                <th style="width: 160px;">Friction Category</th>
+                <th style="width: 110px;">Severity</th>
+                <th>Raw User Verbatim</th>
+              </tr>
+            </thead>
+            <tbody id="verbatim-tbody">
+              <!-- Dynamically populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: BEHAVIORAL JOURNEY INSIGHTS -->
+    <section id="tab-behavior" class="tab-content">
+      <div class="section-heading">
+        <h2>🧭 Behavioral Journey & Lifecycle Dynamics</h2>
+        <p>Answering the core discovery questions: why investors start, what changes after starting, and what triggers churn.</p>
+      </div>
+
+      <!-- Sub-section 1: Start Reasons & Expectations -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <h3>1️⃣ Stated Motives for Starting a SIP</h3>
+          <p class="chart-subtitle">Why first-time investors decided to start investing.</p>
+          <div class="chart-wrapper">
+            <canvas id="chart-start-reasons"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>2️⃣ Initial Return Expectations</h3>
+          <p class="chart-subtitle">Cognitive baseline (FD comparison vs wealth creation).</p>
+          <div class="chart-wrapper">
+            <canvas id="chart-expectations"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-section 2: The 4 Lifecycle Stages -->
+      <div class="card-section">
+        <h3>3️⃣ What Changes Across the 12-Month SIP Lifecycle</h3>
+        <p class="section-subtitle">How friction evolves as investors progress from Month 1 onboarding to Month 12 maturity.</p>
+        <div class="chart-wrapper-lg">
+          <canvas id="chart-lifecycle"></canvas>
+        </div>
+
+        <div class="milestone-cards-grid">
+          <div class="milestone-card border-green">
+            <h4>Month 1: Onboarding & Setup</h4>
+            <ul>
+              <li>NPCI ₹1 Lakh statutory ceiling panic</li>
+              <li>First-installment double-debit confusion</li>
+              <li>Bank mandate synchronization lag</li>
+            </ul>
+          </div>
+          <div class="milestone-card border-blue">
+            <h4>Month 2-3: Statements & T+2</h4>
+            <ul>
+              <li>T+2 business days NAV lag anxiety</li>
+              <li>CAMS/KFintech vs Groww folio confusion</li>
+              <li>ICCL/BSE statutory SMS alerts</li>
+            </ul>
+          </div>
+          <div class="milestone-card border-amber">
+            <h4>Month 4-6: Market Volatility</h4>
+            <ul>
+              <li>First equity market dip (-3% to -8%)</li>
+              <li>Negative XIRR panic & loss aversion</li>
+              <li>Fixed Deposit comparison mindset</li>
+            </ul>
+          </div>
+          <div class="milestone-card border-red">
+            <h4>Month 7-12: Cashflow & Lapse</h4>
+            <ul>
+              <li>Salary delay vs rigid SIP debit date</li>
+              <li>Bank ECS bounce fines (₹295/₹590)</li>
+              <li>Inability to pause without deleting mandate</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-section 3: In-App Confusion vs Outside Workarounds -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <h3>4️⃣ What Confuses Investors Inside the App</h3>
+          <p class="chart-subtitle">Top in-app operational and cognitive confusion points.</p>
+          <div class="chart-wrapper">
+            <canvas id="chart-confusions"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>5️⃣ What Investors Do Outside the App When Unsure</h3>
+          <p class="chart-subtitle">Off-platform workarounds taken when friction occurs.</p>
+          <div class="chart-wrapper">
+            <canvas id="chart-workarounds"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-section 4: Continuers vs Droppers -->
+      <div class="card-section">
+        <h3>6️⃣ What Separates Investors Who Continue vs Those Who Stop</h3>
+        <p class="section-subtitle">Distribution of unmet needs comparing investors who continued vs those who permanently stopped.</p>
+        <div class="table-responsive">
+          <table class="data-table" id="table-comparisons">
+            <thead>
+              <tr>
+                <th>Unmet Need Area</th>
+                <th style="width: 160px;">Continued Share (%)</th>
+                <th style="width: 160px;">Stopped Share (%)</th>
+                <th style="width: 200px;">Gap (Stopped - Continued)</th>
+                <th>Diagnostic Interpretation</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-comparisons">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: QUANTIFIED OPPORTUNITY AREAS -->
+    <section id="tab-opportunities" class="tab-content">
+      <div class="section-heading">
+        <h2>🎯 Quantified Opportunity Areas</h2>
+        <p>Empirically sized opportunity rankings derived mathematically from the authentic touchpoint corpus.</p>
+      </div>
+
+      <div class="card-section">
+        <div class="chart-card no-border">
+          <h3>Opportunity Score = Prevalence (%) × Severity Weight × (1 + Churn Lift)</h3>
+          <p class="chart-subtitle">Ranked index (0-100) reflecting friction frequency, severity, and fatal cancellation correlation.</p>
+          <div class="chart-wrapper-lg">
+            <canvas id="chart-opportunities"></canvas>
+          </div>
+        </div>
+
+        <div class="table-responsive mt-20">
+          <table class="data-table" id="table-opportunities">
+            <thead>
+              <tr>
+                <th style="width: 80px;">Score</th>
+                <th>Opportunity / Problem Space</th>
+                <th style="width: 90px;">Mentions</th>
+                <th style="width: 110px;">Prevalence</th>
+                <th style="width: 130px;">95% Confidence</th>
+                <th style="width: 110px;">Stop Rate</th>
+                <th style="width: 100px;">Churn Lift</th>
+                <th style="width: 120px;">Avg Severity</th>
+                <th style="width: 130px;">Verified Sources</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-opportunities">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Product Intervention Hypotheses -->
+      <div class="card-section">
+        <h3>💡 High-Conviction Product Hypotheses</h3>
+        <p class="section-subtitle">Problem-space hypotheses adhering to SEBI direct-broker compliance and calm brand ethos.</p>
+
+        <div class="hypothesis-grid">
+          <div class="hypothesis-card">
+            <div class="hypo-header">
+              <span class="badge badge-p0">P0 Priority</span>
+              <h4>1. PayDay-Aligned Smart SIP & 1-Tap Skip</h4>
+            </div>
+            <p class="hypo-body">
+              <strong>Problem:</strong> Rigid debit dates collide with variable salary credit dates, triggering punitive ₹295–₹590 bank ECS bounce penalties that destroy investor trust.<br>
+              <strong>Hypothesis:</strong> Allow dynamic debit date shifts matching actual salary credits, combined with a zero-penalty 1-tap skip before bank submission.
+            </p>
+          </div>
+
+          <div class="hypothesis-card">
+            <div class="hypo-header">
+              <span class="badge badge-p0">P0 Priority</span>
+              <h4>2. SIP Volatility Shield (Drawdown Contextualization)</h4>
+            </div>
+            <p class="hypo-body">
+              <strong>Problem:</strong> When an equity fund enters a normal -3% to -8% market correction in Month 4-6, users with an FD mindset panic, misinterpret volatility as a scam, and terminate their SIP.<br>
+              <strong>Hypothesis:</strong> Replace alarming red banners with institutional historical recovery bands (e.g. 3-year Nifty 50 positive rolling return probabilities) to anchor investor patience.
+            </p>
+          </div>
+
+          <div class="hypothesis-card">
+            <div class="hypo-header">
+              <span class="badge badge-p1">P1 Priority</span>
+              <h4>3. Decoupled 1-Tap Pause vs Cancel</h4>
+            </div>
+            <p class="hypo-body">
+              <strong>Problem:</strong> When festive or emergency cash crunches occur, users cannot find a temporary pause option and are forced to delete their SIP or revoke mandates in NetBanking.<br>
+              <strong>Hypothesis:</strong> Separate temporary 1-3 month cashflow relief from irreversible mandate cancellation in the SIP management flow.
+            </p>
+          </div>
+
+          <div class="hypothesis-card">
+            <div class="hypo-header">
+              <span class="badge badge-p1">P1 Priority</span>
+              <h4>4. Statutory SMS & T+2 Settlement Tracker</h4>
+            </div>
+            <p class="hypo-body">
+              <strong>Problem:</strong> First-time investors panic when receiving official regulatory SMS from ICCL/BSE StAR MF or experiencing the standard T+2 business day NAV allotment window.<br>
+              <strong>Hypothesis:</strong> Proactively educate users during Month 1 onboarding that ICCL/BSE SMS alerts are SEBI-mandated clearing, and provide a visual pizza-tracker for unit settlement.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: AI EVIDENCE LOG & BENCHMARK -->
+    <section id="tab-benchmark" class="tab-content">
+      <div class="section-heading">
+        <h2>⚖️ AI Evidence Log & Quality Validation</h2>
+        <p>Evaluating AI classification reliability against a 20-item Human Ground Truth benchmark, including documented corrections.</p>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Benchmark Cases</div>
+          <div class="kpi-value">20</div>
+          <div class="kpi-caption">Human Ground Truth</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Milestone Agreement</div>
+          <div class="kpi-value" id="bench-milestone">90.0%</div>
+          <div class="kpi-caption">Stage Accuracy</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Category Agreement</div>
+          <div class="kpi-value" id="bench-category">90.0%</div>
+          <div class="kpi-caption">Friction Accuracy</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Severity Agreement</div>
+          <div class="kpi-value" id="bench-severity">80.0%</div>
+          <div class="kpi-caption">Impact Accuracy</div>
+        </div>
+      </div>
+
+      <!-- Documented Corrections -->
+      <div class="card-section">
+        <h3>🔬 Documented Correction Cases (Naive LLM vs Human PM Ground Truth)</h3>
+        <p class="section-subtitle">Complex fintech edge cases where naive AI classification misdiagnosed root causes, requiring human domain correction.</p>
+        <div id="corrections-container">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+      <!-- 20-item Golden Benchmark Table -->
+      <div class="card-section">
+        <h3>🧪 Side-by-Side 20-Item Golden Benchmark Table</h3>
+        <p class="section-subtitle">Comparing Human Ground Truth against AI pipeline predictions across all 20 edge cases.</p>
+        <div class="table-responsive">
+          <table class="data-table" id="table-benchmark">
+            <thead>
+              <tr>
+                <th style="width: 80px;">Case ID</th>
+                <th>Ground Truth Milestone</th>
+                <th>AI Prediction Milestone</th>
+                <th>Ground Truth Category</th>
+                <th>AI Prediction Category</th>
+                <th style="width: 100px;">Stage Match</th>
+                <th style="width: 100px;">Cat Match</th>
+                <th style="width: 100px;">Sev Match</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-benchmark">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Single Touchpoint Live Diagnostic Console -->
+      <div class="card-section">
+        <h3>⚡ Single Touchpoint Live Diagnostic Console</h3>
+        <p class="section-subtitle">Test the diagnostic pipeline on custom investor reviews, complaints, or exit-survey verbatims.</p>
+
+        <div class="diag-form">
+          <textarea id="diag-input" rows="3" class="diag-textarea" placeholder="Enter an investor review or verbatim..."></textarea>
+          <div class="diag-actions">
+            <button id="btn-diagnose" class="btn btn-primary">🚀 Run Diagnostic Pipeline</button>
+          </div>
+        </div>
+
+        <div id="diag-result-card" class="diag-result hidden">
+          <h4>Diagnostic Output</h4>
+          <pre id="diag-json" class="json-code"></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <span>Groww Mutual Funds Retention Pod • Internal Strategic Diagnostics</span>
+      <span>SEBI Direct Mutual Fund / EOB Compliance Framework</span>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

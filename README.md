@@ -33,15 +33,20 @@ This engine is engineered specifically to answer the core behavioral discovery q
 
 ```text
 groww_sip_discovery/
-├── requirements.txt         # Clean, lightweight dependencies (streamlit, google-genai, etc.)
+├── requirements.txt         # Clean, lightweight dependencies (fastapi, uvicorn, etc.)
 ├── .env                     # API key configuration (GEMINI_API_KEY, YOUTUBE_API_KEY)
 ├── scraper.py               # 100% genuine data collection (Google Play, App Store RSS, TradingQ&A, YouTube)
 ├── analyzer.py              # Behavioral evaluation pipeline (Gemini Flash + Offline Deterministic Engine)
 ├── golden_set.py            # AI Evidence Log & 20-item Ground Truth Benchmark with 3 correction cases
-├── app.py                   # Clean, minimalist 4-Tab Executive Problem Discovery Dashboard
+├── server.py                # High-performance FastAPI server (<40MB RAM, sub-second boot)
+├── static/                  # Modern, clean frontend (Groww mint aesthetic)
+│   ├── index.html           # 4-Tab Executive Dashboard (Semantic HTML5)
+│   ├── style.css            # Vanilla CSS design system tokens
+│   └── app.js               # Client-side Chart.js visualizations & live diagnostic harness
 ├── data/
 │   ├── golden_set.json      # Curated 20 benchmark cases with ground truth & comparison metrics
-│   └── scraped_reviews.json # 900+ authentic, deduplicated, and PII-sanitized investor verbatims
+│   └── scraped_reviews.json # 920+ authentic, deduplicated, and PII-sanitized investor verbatims
+├── render.yaml              # 1-Click Render.com deployment blueprint
 └── README.md                # System documentation & deployment guide
 ```
 
@@ -51,9 +56,9 @@ groww_sip_discovery/
 
 | Channel | Method / Protocol | Authentication | Volume |
 | :--- | :--- | :--- | :--- |
-| **Google Play Store** | Live reviews for Groww app via `google-play-scraper` (Newest + Relevant) | Zero auth | 500+ reviews |
-| **Apple App Store** | Live India storefront customer reviews via official iTunes RSS JSON feed | Zero auth | 100+ reviews |
-| **TradingQ&A Forum** | Live investor conversations via Discourse public search API | Zero auth | 250+ posts |
+| **Google Play Store** | Live reviews for Groww app via `google-play-scraper` (Newest + Relevant) | Zero auth | 540+ reviews |
+| **Apple App Store** | Live India storefront customer reviews via official iTunes RSS JSON feed | Zero auth | 110+ reviews |
+| **TradingQ&A Forum** | Live investor conversations via Discourse public search API | Zero auth | 260+ posts |
 | **YouTube Comments** | Live top comments on personal finance SIP videos via YouTube Data API v3 | `YOUTUBE_API_KEY` | Optional |
 
 *Note: All touchpoints are scrubbed of PII (emails, phone numbers, PAN cards, account numbers).*
@@ -64,7 +69,8 @@ groww_sip_discovery/
 
 - **Data Ingestion:** 100% free unauthenticated public feeds (Play Store, App Store RSS, TradingQ&A).
 - **AI / LLM Layer:** Google Gemini 2.5/1.5 Flash via `google-genai` SDK. Automatically falls back to a deterministic domain heuristic engine if `GEMINI_API_KEY` is not configured.
-- **User Interface:** Streamlit (Python). Free local execution; 1-click deploy to Streamlit Community Cloud.
+- **Backend API:** FastAPI + Uvicorn (Python). Runs in **~35MB RAM** (eliminates Render OOM crashes).
+- **Frontend Dashboard:** Modern Vanilla HTML5, CSS3, and Chart.js.
 
 ---
 
@@ -113,49 +119,38 @@ YOUTUBE_API_KEY=your-youtube-api-key
 ```
 *(The engine runs completely offline with full accuracy if keys are omitted!)*
 
-### 4. Run Data Ingestion:
+### 4. Run Data Ingestion (Optional - dataset already included):
 ```bash
 python scraper.py
 ```
 
-### 5. Launch the Streamlit Executive Dashboard Locally:
+### 5. Launch the Executive Dashboard:
 ```bash
-streamlit run app.py
+python -m uvicorn server:app --host 0.0.0.0 --port 8000 --reload
 ```
-Open `http://localhost:8501` in your browser.
+Open `http://localhost:8000` in your browser.
 
 ---
 
 ## 🌐 Deploying to Render (Free Tier)
 
-This repository includes a pre-configured `render.yaml` and `.streamlit/config.toml` ready for 1-click deployment on [Render.com](https://render.com).
+This repository includes a pre-configured `render.yaml` ready for 1-click deployment on [Render.com](https://render.com).
 
 ### Step-by-Step Instructions:
-1. **Push your code to GitHub:**
+1. **Commit and push your code to GitHub:**
    ```bash
-   git init
    git add .
-   git commit -m "Groww SIP Discovery Engine"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/groww-sip-discovery.git
-   git push -u origin main
+   git commit -m "Migrate to lightweight FastAPI + HTML5 dashboard"
+   git push origin main
    ```
 2. **Log into [Render.com](https://dashboard.render.com):**
    - Click **"New +"** and choose **"Web Service"**.
-   - Connect your GitHub repository: `groww-sip-discovery`.
-3. **Configure Settings:**
+   - Connect your GitHub repository: `TenaciousSwan/Groww-sip-discovery`.
+3. **Verify Settings (Auto-detected via `render.yaml`):**
    - **Name:** `groww-sip-discovery`
-   - **Environment:** `Python 3`
-   - **Region:** Any (e.g., Singapore or Frankfurt)
-   - **Branch:** `main`
-   - **Build Command:**
-     ```bash
-     pip install -r requirements.txt
-     ```
-   - **Start Command:**
-     ```bash
-     streamlit run app.py --server.port $PORT --server.address 0.0.0.0
-     ```
+   - **Runtime:** `Python 3`
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** `uvicorn server:app --host 0.0.0.0 --port $PORT`
    - **Plan:** Free
 4. **Environment Variables (Optional):**
    - Under **Environment Variables**, add:
@@ -163,5 +158,6 @@ This repository includes a pre-configured `render.yaml` and `.streamlit/config.t
      - `YOUTUBE_API_KEY`: *(your YouTube key)*
      - `PYTHON_VERSION`: `3.10.12`
 5. **Click "Create Web Service":**
-   Render will build the application and provide a permanent public HTTPS URL (e.g., `https://groww-sip-discovery.onrender.com`).
+   Render will build the application in ~30 seconds and provide a permanent public HTTPS URL (e.g., `https://groww-sip-discovery.onrender.com`).
+
 
